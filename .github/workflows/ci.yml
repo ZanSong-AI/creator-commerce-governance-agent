@@ -90,15 +90,27 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
         working-directory: frontend
       - run: cp .env.example .env
+      - name: Prepare writable runtime directories
+        run: |
+          mkdir -p .runtime data reports
+          chmod 0777 .runtime data reports
       - run: docker compose up -d --build
       - name: Wait for the local API and load deterministic fixtures
         run: |
+          ready=false
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://localhost:8000/api/v1/health >/dev/null; then break; fi
+            if curl --fail --silent --show-error http://localhost:8000/api/v1/health >/dev/null; then
+              ready=true
+              break
+            fi
             sleep 2
           done
-          curl --fail --silent -X POST -H 'Idempotency-Key: ci-bootstrap-v1' http://localhost:8000/api/v1/demo/bootstrap
-          curl --fail --silent -X POST -H 'Idempotency-Key: ci-load-media-v1' http://localhost:8000/api/v1/demo/load-media-cases
+          if [ "$ready" != "true" ]; then
+            docker compose logs api
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error -X POST -H 'Idempotency-Key: ci-bootstrap-v1' http://localhost:8000/api/v1/demo/bootstrap
+          curl --fail-with-body --silent --show-error -X POST -H 'Idempotency-Key: ci-load-media-v1' http://localhost:8000/api/v1/demo/load-media-cases
       - name: Validate every public MP4 admission boundary
         run: docker compose exec -T api python /workspace/scripts/verify_media_fixtures.py
       - run: pnpm run test:e2e
