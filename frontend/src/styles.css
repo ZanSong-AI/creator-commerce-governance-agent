@@ -94,9 +94,14 @@ pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; color:
 @media (max-width: 900px) {
   .app-shell { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; }
-  nav { grid-template-columns: repeat(2, 1fr); margin-top: 22px; }
+  nav { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 22px; }
+  .nav-item { min-width: 0; }
   .sidebar-note { position: static; margin-top: 20px; }
   main { padding: 30px 20px 60px; }
   .metric-grid, .split-grid, .case-grid { grid-template-columns: 1fr; }
   .detail-grid { grid-template-columns: 100px minmax(0, 1fr); }
+}
+
+@media (max-width: 480px) {
+  nav { grid-template-columns: 1fr; }
 }
