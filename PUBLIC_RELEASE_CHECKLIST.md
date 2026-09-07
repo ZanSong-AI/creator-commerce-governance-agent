@@ -46,7 +46,7 @@ This checklist must be completed by Song before making the repository public.
 
 - [x] Song reviewed and approved the public-safe project scope and GitHub publication.
 - [x] Song approved repository creation and public visibility on 2026-09-06.
-- [ ] The first hosted GitHub Actions run passes after the approved initial push.
+- [x] The corrected hosted GitHub Actions release gate passes after the approved initial push.
 - [x] `v0.1.0` release notes state actual scope and known limitations.
 - [x] Scheduled source monitoring remains disabled.
 - [ ] A separate human approval exists before enabling any weekly schedule.
