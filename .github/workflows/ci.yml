@@ -34,7 +34,7 @@ jobs:
           cache: pip
       - run: pip install -c backend/requirements.lock -e './backend[dev]'
       - run: pip check
-      - run: ruff check backend scripts
+      - run: ruff check --config backend/pyproject.toml backend/src backend/tests scripts
       - name: Verify migration on an empty PostgreSQL database
         working-directory: backend
         env:
