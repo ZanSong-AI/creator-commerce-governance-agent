@@ -1,0 +1,150 @@
+{
+  "registry_version": "2026-08-28.4",
+  "verified_at": "2026-08-28T19:32:00-07:00",
+  "sources": [
+    {
+      "stable_key": "us-ftc-endorsement-guides-16-cfr-255",
+      "publisher": "U.S. Government Publishing Office / Federal Trade Commission",
+      "title": "16 CFR Part 255 — Guides Concerning Use of Endorsements and Testimonials in Advertising",
+      "official_url": "https://www.ecfr.gov/current/title-16/chapter-I/subchapter-B/part-255",
+      "source_type": "administrative_guide",
+      "jurisdiction": "US",
+      "published_date": "2023-07-26",
+      "effective_date": "2023-07-26",
+      "version": "eCFR-daily; exact as-of date is stored per snapshot",
+      "applicable_scope": "Endorsements and testimonials in advertising evaluated under Section 5 of the FTC Act.",
+      "fetch_mode": "ecfr_api",
+      "retrieval": {
+        "title": 16,
+        "part": "255"
+      },
+      "redistribution_note": "Runtime snapshot is not committed; public fixtures contain only attributed minimum excerpts."
+    },
+    {
+      "stable_key": "us-ftc-endorsement-faq",
+      "publisher": "Federal Trade Commission",
+      "title": "The FTC's Endorsement Guides: What People Are Asking",
+      "official_url": "https://www.ftc.gov/business-guidance/resources/ftcs-endorsement-guides-what-people-are-asking",
+      "source_type": "regulator_staff_guidance",
+      "jurisdiction": "US",
+      "published_date": null,
+      "effective_date": null,
+      "version": "updated-for-2023-guides",
+      "applicable_scope": "FTC staff guidance and examples about endorsements; context-specific and not binding on the Commission.",
+      "fetch_mode": "http",
+      "redistribution_note": "Runtime snapshot is not committed; public fixtures contain only attributed minimum excerpts."
+    },
+    {
+      "stable_key": "us-ftc-disclosures-101",
+      "publisher": "Federal Trade Commission",
+      "title": "Disclosures 101 for Social Media Influencers",
+      "official_url": "https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers",
+      "source_type": "regulator_staff_guidance",
+      "jurisdiction": "US",
+      "published_date": "2019-11-01",
+      "effective_date": null,
+      "version": "2019-11",
+      "applicable_scope": "Plain-language FTC staff guidance for social-media endorsements and disclosure placement.",
+      "fetch_mode": "http",
+      "redistribution_note": "Runtime snapshot is not committed; public fixtures contain only attributed minimum excerpts."
+    },
+    {
+      "stable_key": "tiktok-commercial-content-disclosure",
+      "publisher": "TikTok",
+      "title": "Promoting a brand, product, or service",
+      "official_url": "https://support.tiktok.com/en/business-and-creator/creator-and-business-accounts/promoting-a-brand-product-or-service",
+      "source_type": "platform_policy_help",
+      "jurisdiction": "GLOBAL_PLATFORM",
+      "published_date": null,
+      "effective_date": null,
+      "version": "not_published",
+      "applicable_scope": "TikTok content promoting a creator's own business or a third-party brand for payment or another incentive.",
+      "fetch_mode": "tiktok_faq_api",
+      "retrieval": {
+        "faq_id": "7636670088170904085",
+        "expected_title": "Promoting a brand, product, or service",
+        "expected_marker": "When posting content that promotes a brand, product, or service on TikTok, you must turn on the content disclosure setting.",
+        "locale": "en",
+        "country": "US"
+      },
+      "redistribution_note": "Do not commit full page content. The page publishes no public version number; never infer one."
+    },
+    {
+      "stable_key": "tiktok-aigc-labeling",
+      "publisher": "TikTok",
+      "title": "About AI-generated content",
+      "official_url": "https://support.tiktok.com/en/using-tiktok/creating-videos/ai-generated-content",
+      "source_type": "platform_policy_help",
+      "jurisdiction": "GLOBAL_PLATFORM",
+      "published_date": null,
+      "effective_date": null,
+      "version": "not_published",
+      "applicable_scope": "TikTok creator and automatic labels for content generated or significantly edited by AI, including realistic AIGC.",
+      "fetch_mode": "tiktok_faq_api",
+      "retrieval": {
+        "faq_id": "7636670084747893268",
+        "expected_title": "About AI-generated content",
+        "expected_marker": "What are the requirements for posting AI-generated content on TikTok?",
+        "locale": "en",
+        "country": "US"
+      },
+      "redistribution_note": "Do not commit full page content. The page publishes no public version number; never infer one."
+    },
+    {
+      "stable_key": "eu-ai-act-article-50",
+      "publisher": "European Union",
+      "title": "Regulation (EU) 2024/1689 — Article 50",
+      "official_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R1689-20260727",
+      "source_type": "regulation",
+      "jurisdiction": "EU",
+      "published_date": "2024-07-12",
+      "effective_date": "2026-08-02",
+      "version": "consolidated-2026-07-27",
+      "applicable_scope": "Article 50 transparency obligations for providers and deployers of specified AI systems and synthetic or manipulated content. Article 111(4) gives providers of covered systems placed on the market before 2026-08-02 until 2026-12-02 to take the necessary Article 50(2) compliance steps; actor and transition applicability require human review.",
+      "fetch_mode": "http",
+      "redistribution_note": "Runtime snapshot is not committed; cite EUR-Lex and retain only minimum attributed excerpts in fixtures."
+    },
+    {
+      "stable_key": "eu-commission-article-50-guidelines",
+      "publisher": "European Commission, DG CONNECT",
+      "title": "Guidelines on transparency obligations for providers and deployers of AI systems",
+      "official_url": "https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems",
+      "source_type": "regulator_guidance",
+      "jurisdiction": "EU",
+      "published_date": "2026-07-20",
+      "effective_date": "2026-08-02",
+      "version": "last-update-2026-07-31",
+      "applicable_scope": "Practical Commission guidance on consistent implementation of AI Act Article 50.",
+      "fetch_mode": "http",
+      "redistribution_note": "Runtime snapshot is not committed; downloaded guidance remains local unless redistribution is reviewed."
+    },
+    {
+      "stable_key": "c2pa-specification",
+      "publisher": "Coalition for Content Provenance and Authenticity",
+      "title": "Content Credentials: C2PA Technical Specification",
+      "official_url": "https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html",
+      "source_type": "technical_standard",
+      "jurisdiction": "GLOBAL_TECHNICAL",
+      "published_date": null,
+      "effective_date": null,
+      "version": "2.4",
+      "applicable_scope": "Technical provenance manifests, validation states, trust model, and AI disclosure assertions.",
+      "fetch_mode": "http",
+      "redistribution_note": "C2PA specification is CC BY 4.0; keep attribution and avoid bundling full snapshots."
+    },
+    {
+      "stable_key": "c2pa-python-sdk",
+      "publisher": "Content Authenticity Initiative",
+      "title": "c2pa-python",
+      "official_url": "https://github.com/contentauth/c2pa-python",
+      "source_type": "official_sdk",
+      "jurisdiction": "GLOBAL_TECHNICAL",
+      "published_date": "2026-08-27",
+      "effective_date": null,
+      "version": "0.37.8",
+      "applicable_scope": "Official Python binding for reading, validating, creating, and signing C2PA manifests.",
+      "fetch_mode": "http",
+      "redistribution_note": "SDK is dual licensed Apache-2.0/MIT; dependency is not vendored."
+    }
+  ]
+}

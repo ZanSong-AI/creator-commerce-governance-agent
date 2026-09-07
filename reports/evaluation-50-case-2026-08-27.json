@@ -1,0 +1,51 @@
+{
+  "dataset_version": "media-gold-2026-08-27.v1",
+  "evaluation_mode": "isolated_gold_fixture",
+  "evidence_run": "real local extraction followed by cached-evidence correction",
+  "cases_total": 50,
+  "cases_with_result": 50,
+  "cases_failed": 0,
+  "schema_valid_output_rate": 1.0,
+  "exact_quote_validation_rate": 1.0,
+  "ocr_phrase_detection": {
+    "precision": 1.0,
+    "recall": 0.8571,
+    "true_positive": 12,
+    "false_positive": 0,
+    "false_negative": 2
+  },
+  "asr_phrase_detection": {
+    "provider": "faster-whisper",
+    "precision": 1.0,
+    "recall": 0.8571,
+    "true_positive": 12,
+    "false_positive": 0,
+    "false_negative": 2
+  },
+  "provenance_parsing_success_rate": 1.0,
+  "candidate_finding_precision": 0.9355,
+  "candidate_finding_recall": 1.0,
+  "candidate_finding_false_positive_rate": 0.0645,
+  "abstention_rate": 0.1,
+  "source_freshness_rate": 0.6667,
+  "approved_requirements": 0,
+  "approved_mappings": 0,
+  "operational_rule_activation": false,
+  "real_extraction_latency_ms": {
+    "p50": 1280.24,
+    "p95": 4115.12,
+    "max": 4554.85
+  },
+  "real_extraction_throughput_cases_per_second": 0.59,
+  "detection_errors": [
+    {"case": "case-020", "modality": "ocr", "expected": true, "predicted": false},
+    {"case": "case-025", "modality": "asr", "expected": true, "predicted": false},
+    {"case": "case-030", "modality": "ocr", "expected": true, "predicted": false},
+    {"case": "case-030", "modality": "asr", "expected": true, "predicted": false}
+  ],
+  "limitations": [
+    "Synthetic gold data is not an estimate of real platform prevalence.",
+    "Prominence and legal applicability remain human review tasks.",
+    "Evaluation rules do not authorize operational mappings."
+  ]
+}

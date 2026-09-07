@@ -1,0 +1,26 @@
+{
+  "dataset_version": "governance-events-2026-08-27.v1",
+  "event_type_counts": {
+    "analysis_completed": 20,
+    "content_created": 20,
+    "finding_created": 20,
+    "metadata_recorded": 20,
+    "reviewed": 20
+  },
+  "jurisdiction_counts": {
+    "CA": 16,
+    "EU": 33,
+    "US": 51
+  },
+  "logical_sha256": "e3f65bdfcb675d312b9f971f29011e89ea2d2ca9ecbba0d73378166f730700cf",
+  "notice": "Synthetic events; not a measurement of TikTok risk, revenue, or ROI.",
+  "processing_latency_ms_total": 45023,
+  "review_disposition_counts": {
+    "confirmed_control_issue": 2,
+    "dismissed": 2,
+    "needs_more_evidence": 2,
+    "not_applicable": 14
+  },
+  "row_count": 100,
+  "seed": 20260827
+}

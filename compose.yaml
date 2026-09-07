@@ -1,0 +1,130 @@
+name: creator-commerce-governance
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-creator_governance}
+      POSTGRES_USER: ${POSTGRES_USER:-creator_governance}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_only_change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-creator_governance} -d ${POSTGRES_DB:-creator_governance}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  api:
+    build:
+      context: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://creator_governance:local_dev_only_change_me@postgres:5432/creator_governance}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/1}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-song-local:latest}
+      ALLOW_CLOUD: "false"
+      PROJECT_ROOT: /workspace
+      ASR_PROVIDER: ${ASR_PROVIDER:-fixture}
+    command: ["sh", "-c", "alembic upgrade head && uvicorn ccg_agent.main:app --host 0.0.0.0 --port 8000 --reload"]
+    volumes:
+      - ./backend:/app
+      - ./.runtime:/app/.runtime
+      - ./config:/workspace/config:ro
+      - ./fixtures:/workspace/fixtures:ro
+      - ./fixtures/media:/workspace/fixtures/media
+      - ./scripts:/workspace/scripts:ro
+      - ./data:/workspace/data
+      - ./reports:/workspace/reports
+      - ./.runtime:/workspace/.runtime
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/live', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+
+  worker:
+    build:
+      context: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://creator_governance:local_dev_only_change_me@postgres:5432/creator_governance}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/1}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-song-local:latest}
+      ALLOW_CLOUD: "false"
+      PROJECT_ROOT: /workspace
+      ASR_PROVIDER: ${ASR_PROVIDER:-fixture}
+    command:
+      [
+        "celery",
+        "-A",
+        "ccg_agent.worker.celery_app",
+        "worker",
+        "--loglevel=INFO",
+        "--concurrency=1",
+      ]
+    volumes:
+      - ./backend:/app
+      - ./.runtime:/app/.runtime
+      - ./config:/workspace/config:ro
+      - ./fixtures:/workspace/fixtures:ro
+      - ./fixtures/media:/workspace/fixtures/media
+      - ./scripts:/workspace/scripts:ro
+      - ./data:/workspace/data
+      - ./reports:/workspace/reports
+      - ./.runtime:/workspace/.runtime
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+    environment:
+      CI: "true"
+      VITE_API_PROXY_TARGET: http://api:8000
+    command: ["pnpm", "run", "dev:container"]
+    volumes:
+      - ./frontend:/app
+      - web_node_modules:/app/node_modules
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5173}:5173"
+
+volumes:
+  postgres_data:
+  web_node_modules:

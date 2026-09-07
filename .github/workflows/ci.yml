@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: creator_governance_ci
+          POSTGRES_USER: creator_governance
+          POSTGRES_PASSWORD: ci_only_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U creator_governance -d creator_governance_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -c backend/requirements.lock -e './backend[dev]'
+      - run: pip check
+      - run: ruff check backend scripts
+      - name: Verify migration on an empty PostgreSQL database
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql+psycopg://creator_governance:ci_only_password@localhost:5432/creator_governance_ci
+        run: alembic upgrade head
+      - run: pytest backend/tests
+        env:
+          TEST_DATABASE_URL: postgresql+psycopg://creator_governance:ci_only_password@localhost:5432/creator_governance_ci
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          version: 11.24.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm test -- --run
+      - run: pnpm run build
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - run: cp .env.example .env
+      - run: docker compose config --quiet
+      - run: docker compose build api worker web
+
+  deterministic-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          version: 11.24.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: frontend
+      - run: pnpm exec playwright install --with-deps chromium
+        working-directory: frontend
+      - run: cp .env.example .env
+      - run: docker compose up -d --build
+      - name: Wait for the local API and load deterministic fixtures
+        run: |
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://localhost:8000/api/v1/health >/dev/null; then break; fi
+            sleep 2
+          done
+          curl --fail --silent -X POST -H 'Idempotency-Key: ci-bootstrap-v1' http://localhost:8000/api/v1/demo/bootstrap
+          curl --fail --silent -X POST -H 'Idempotency-Key: ci-load-media-v1' http://localhost:8000/api/v1/demo/load-media-cases
+      - name: Validate every public MP4 admission boundary
+        run: docker compose exec -T api python /workspace/scripts/verify_media_fixtures.py
+      - run: pnpm run test:e2e
+        working-directory: frontend
+      - if: always()
+        run: docker compose down -v
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-and-release-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install --upgrade pip==26.2.1 setuptools==84.0.0
+      - run: pip install -c backend/requirements.lock -e './backend[dev,media]' pip-audit pip-licenses
+      - run: pip check
+      - run: pip-audit -r backend/requirements.lock
+      - run: pip-licenses --format=markdown --with-urls
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+        with:
+          version: 11.24.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: frontend
+      - run: pnpm audit --audit-level high
+        working-directory: frontend
+      - run: pnpm licenses list --json
+        working-directory: frontend
+      - run: python scripts/check_markdown_links.py
+      - run: python scripts/check_public_tree.py

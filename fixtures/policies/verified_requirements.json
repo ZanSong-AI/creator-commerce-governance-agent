@@ -1,0 +1,76 @@
+{
+  "fixture_version": "2026-08-28",
+  "notice": "Attributed minimum excerpts for deterministic tests; verify official sources before operational use.",
+  "requirements": [
+    {
+      "stable_key": "ftc-clear-conspicuous-multimodal",
+      "source_key": "us-ftc-endorsement-guides-16-cfr-255",
+      "locator": "16 CFR 255.0(f)",
+      "exact_quote": "if the representation is made through both visual and audible means, the disclosure should be made in the communication's visual and audible portions.",
+      "actor": "advertiser or endorser",
+      "trigger": "an endorsement representation is communicated through both visual and audible means",
+      "required_action": "provide the disclosure in both the visual and audible portions",
+      "exception": null,
+      "jurisdiction": "US",
+      "effective_date": "2023-07-26",
+      "scope": "synthetic social-media promotional video",
+      "controls": ["visual_disclosure_detected", "audio_disclosure_detected"]
+    },
+    {
+      "stable_key": "tiktok-commercial-disclosure-setting",
+      "source_key": "tiktok-commercial-content-disclosure",
+      "locator": "Requirements for promoting a brand, product, or service",
+      "exact_quote": "When posting content that promotes a brand, product, or service on TikTok, you must turn on the content disclosure setting.",
+      "actor": "TikTok creator",
+      "trigger": "posting content that promotes a brand, product, or service on TikTok",
+      "required_action": "turn on the platform content disclosure setting",
+      "exception": null,
+      "jurisdiction": "GLOBAL_PLATFORM",
+      "effective_date": null,
+      "scope": "synthetic TikTok-like creator commerce post; platform policy, not law",
+      "controls": ["platform_disclosure_flag_present"]
+    },
+    {
+      "stable_key": "tiktok-realistic-aigc-label",
+      "source_key": "tiktok-aigc-labeling",
+      "locator": "AI-generated content overview",
+      "exact_quote": "We also require creators to label all AI-generated content that contains realistic images, audio, and video, as explained in our Community Guidelines.",
+      "actor": "TikTok creator",
+      "trigger": "publishing AI-generated content containing realistic images, audio, or video",
+      "required_action": "apply an AI-generated content label",
+      "exception": "TikTok may automatically label content made only with qualifying TikTok AI effects",
+      "jurisdiction": "GLOBAL_PLATFORM",
+      "effective_date": null,
+      "scope": "synthetic TikTok-like AIGC promotional post; platform policy, not law",
+      "controls": ["aigc_visible_label_present"]
+    },
+    {
+      "stable_key": "eu-provider-machine-readable-aigc",
+      "source_key": "eu-ai-act-article-50",
+      "locator": "Article 50(2)",
+      "exact_quote": "Providers of AI systems, including general-purpose AI systems, generating synthetic audio, image, video or text content, shall ensure that the outputs of the AI system are marked in a machine-readable format and detectable as artificially generated or manipulated.",
+      "actor": "provider of an AI system generating synthetic content",
+      "trigger": "the AI system generates synthetic audio, image, video, or text content",
+      "required_action": "mark outputs in a machine-readable format detectable as artificially generated or manipulated",
+      "exception": "assistive standard editing that does not substantially alter input data or semantics, and specified law-enforcement uses",
+      "jurisdiction": "EU",
+      "effective_date": "2026-08-02",
+      "scope": "provider-side synthetic content output; actor applicability requires human review",
+      "controls": ["c2pa_manifest_present", "c2pa_validation_status_recorded"]
+    },
+    {
+      "stable_key": "eu-provider-machine-readable-aigc-transition",
+      "source_key": "eu-ai-act-article-50",
+      "locator": "Article 111(4)",
+      "exact_quote": "Providers of AI systems, including general-purpose AI systems, generating synthetic audio, image, video or text content, that have been placed on the market before 2 August 2026 shall take the necessary steps in order to comply with Article 50(2) by 2 December 2026.",
+      "actor": "provider of a covered AI system placed on the market before 2 August 2026",
+      "trigger": "the covered system was placed on the market before 2 August 2026",
+      "required_action": "take the necessary steps to comply with Article 50(2) by 2 December 2026",
+      "exception": null,
+      "jurisdiction": "EU",
+      "effective_date": "2026-12-02",
+      "scope": "transition timing for provider-side Article 50(2) obligations; actor, market-placement date, and territorial applicability require human review",
+      "controls": ["human_review_required"]
+    }
+  ]
+}

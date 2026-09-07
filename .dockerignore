@@ -1,0 +1,12 @@
+.git
+.github
+.runtime
+.models
+.venv
+node_modules
+dist
+reports/generated
+data/generated
+media/generated
+*.sqlite3
+*.log
