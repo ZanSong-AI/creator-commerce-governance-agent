@@ -17,7 +17,7 @@ dependencies = [
   "psycopg[binary]>=3.2,<4",
   "pydantic-settings>=2.6,<3",
   "redis>=5,<7",
-  "reportlab>=5.0.1,<5.1",
+  "reportlab>=5.0.1,<5.2",
   "sqlalchemy>=2.0,<3",
   "uvicorn[standard]>=0.32,<1",
 ]
